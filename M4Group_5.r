@@ -68,7 +68,7 @@ cost_misclass_05 <- function(y,p_hat) {
   pred_class <-ifelse(p_hat >0.5, "Yes", "No")
   mean(pred_class != ifelse(y=="Yes", "Yes", "No"))
 }
-# Cv.glm is used because it automatically sets K equal to the number of rows in the data which is the LOOCV.
+# Cv.glm is used and it automatically sets K equal to the number of rows in the data which is the LOOCV.
 cv_loocv <- cv.glm(data = Default, glmfit = default_glm, cost=cost_misclass_05)
 
 # Delta 1 is the direct average misclassification rate. It is computed using the 0.5 cutoff and is comparable to the validation-set error.
@@ -76,7 +76,21 @@ loocv_err <- cv_loocv$delta[1]
 loocv_err
 # The average misclassification rate using LOOCV is approximately 1.46%, meaning that about 98.54% of the observations are classified accurately. This provides strong evidence of stable out-of-sample performance.The LOOCV misclassification rate is lower than the validation error which reflects the reduced bias of LOOCV. Since both estimates are relatively close we can conclude that the model generalizes well and its performance estimate is stable.
 
+## Problem 1(D) Use K-Fold (k=5) to split the observations
+set.seed(1)
 
+# Using the same function as in LOOCV to compute steps 3 and 4. 
+cost_misclass_05 <- function(y,p_hat) {
+  pred_class <-ifelse(p_hat >0.5, "Yes", "No")
+  mean(pred_class != ifelse(y=="Yes", "Yes", "No"))
+}
+# Cv.Glm is used and K is manually set to 5.
+cv_k5 <- cv.glm(data = Default, glmfit = default_glm, cost = cost_misclass_05, K=5)
+
+# Delta 1 is the direct average misclassification rate.
+k5_err <-cv_k5$delta[1]
+k5_err
+#The 5-Fold misclassification rate is approximately 1.46% which is the same as the LOOCV misclassification rate. This tells us that the estimated test error is stable. It is not unexpected that they are the same and this agreement indicates that the test error estimate is reliable and the model is stable with a roughly 98.5% accuracy rate.
 
 library(boot)
 set.seed(1)
