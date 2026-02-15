@@ -1,0 +1,59 @@
+---
+title: "M7"
+author: "Jessica Lee"
+date: "2026-02-15"
+output: word_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+```{r}
+library(readr)
+
+CreditShort <- read.csv("CreditShort.csv")
+
+head(CreditShort)
+summary(CreditShort)
+```
+Interpretation: From the summary, we can see the typical applicant has a median income of 33.12, a median limit of 4,622, a median rating of 344, and about 3 cards (median = 3). Ages range from 23 to 98 with a mean of 55.67, and education ranges from 5 to 20 years with a median of 14. Overall, the variables are on very different numeric scales (for example, Limit and Rating are much larger than Cards), which is why scaling matters for PCA.
+
+## A: Principal Component Analysis (PCA) on CreditShort Data 
+
+```{r}
+credit_variables <- CreditShort[, c("Income", "Limit", "Rating", "Cards", "Age", "Education")]
+
+credit_pca <- prcomp(credit_variables, scale. = TRUE) #sd = 1
+
+credit_pca$rotation
+```
+Interpretation:
+PC1 loads heavily on Income, Limit, and Rating, so we can interpret this as an overall credit strength dimension. Applicants with higher scores on PC1 likely have higher income, higher limits, and stronger credit ratings.
+
+PC2 loads strongly on Cards (positive) and Education (negative), suggesting this component may reflect differences in credit usage relative to education level.
+
+PC3 loads heavily on Age and Education, which may capture a demographic or lifecycle pattern in the data.
+
+Overall, we see that PCA helps us summarize the six original variables into a few broader underlying dimensions, with PC1 capturing the main variation related to creditworthiness.
+
+## B: Biplot and PVE
+
+```{r}
+biplot(credit_pca, choices = c(1,2), scale = 1, cex = 0.5)
+
+credit_pca$sdev
+
+pve <- (credit_pca$sdev^2) / sum(credit_pca$sdev^2)
+pve
+```
+Interpretation: PC1 explains 45.9% of the variance and PC2 explains 17.6%, so together they account for about 63.5% of the total variation. In the biplot, Income, Limit, and Rating point in the same direction, showing they are positively correlated and drive PC1, which represents overall credit strength. PC2 is mainly driven by Cards (positive) and Education (negative), separating applicants along those two variables.
+
+## C: Interpret your findings in steps (A) and (B).
+(A) PCA Loadings:
+From the loading vectors, we see that PC1 loads heavily on Income, Limit, and Rating, indicating this component represents overall credit strength. PC2 is mainly influenced by Cards (positive loading) and Education (negative loading), separating applicants based on credit card usage versus education. The remaining components capture smaller, more specific variation in the data.
+
+(B) Biplot and PVE:
+The biplot confirms these relationships visually, with Income, Limit, and Rating pointing in the same direction along PC1. Cards and Education point in opposite directions along PC2. The PVE results show that PC1 explains about 45.9% of the variance and PC2 explains 17.6%, so together they account for roughly 63.5% of the total variation. This means the first two components summarize most of the structure in the dataset.
