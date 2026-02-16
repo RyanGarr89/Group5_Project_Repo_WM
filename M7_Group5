@@ -1,0 +1,34 @@
+## Problem 2a
+#Import the data into a dataframe.
+USArrests <- read.csv("USArrests.csv", row.names = 1)
+
+#Scale the dataset because the variables have very different ranges. Without scaling, the assault will dominate distance calculations.
+USArrests_scale <- scale(USArrests)
+
+set.seed(1)
+
+#Run k-means for k = 2,3,4,5
+km2 <-kmeans(USArrests_scale, centers = 2, nstart = 20)
+km3 <-kmeans(USArrests_scale, centers = 3, nstart = 20)
+km4 <-kmeans(USArrests_scale, centers = 4, nstart = 20)
+km5 <-kmeans(USArrests_scale, centers = 5, nstart = 20)
+
+#Compare the WSS
+km2$tot.withinss
+km3$tot.withinss
+km4$tot.withinss
+km5$tot.withinss
+
+#Cluster Sizes
+km2$size
+km3$size
+km4$size
+km5$size
+
+#Cluster Centers
+km2$centers
+km3$centers
+km4$centers
+km5$centers
+
+#Interpretation: K = 2 produces a clear high-crime vs low-crime split. One cluster contains the high murder, assault, and rape rates while the other shows lower violent crime rates. It is vey interpretable. K=3 adds a middle crime group but the boundaries between these three clusters is less distinct. K = 4 has further segmentation and the clusters are smaller and harder to interpret. K = 5 has even finer granularity but risks over-segmentation. Some clusters only differe slightly and it is hard to justify the five different clusters when thinking of how it can be interpreted.K = 2 would be th best choice because it has the highest cluster separation and clear interpretation. It avoids overfitting and it the most defensible choice when thinking of logic. If a larger k were chosen, it would lead to finer segmentation for decision making but would be hard to justify and interpret.
