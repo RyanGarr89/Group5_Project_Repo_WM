@@ -32,3 +32,25 @@ km4$centers
 km5$centers
 
 #Interpretation: K = 2 produces a clear high-crime vs low-crime split. One cluster contains the high murder, assault, and rape rates while the other shows lower violent crime rates. It is vey interpretable. K=3 adds a middle crime group but the boundaries between these three clusters is less distinct. K = 4 has further segmentation and the clusters are smaller and harder to interpret. K = 5 has even finer granularity but risks over-segmentation. Some clusters only differe slightly and it is hard to justify the five different clusters when thinking of how it can be interpreted.K = 2 would be th best choice because it has the highest cluster separation and clear interpretation. It avoids overfitting and it the most defensible choice when thinking of logic. If a larger k were chosen, it would lead to finer segmentation for decision making but would be hard to justify and interpret.
+
+#2(b) Ryan G
+#Hierarchical clustering by states
+hc_complete <- hclust(dist(USArrests), method = "complete")
+plot(hc_complete, main = "Hierarchical Clustering")
+#Cutting Dendrogram
+hc_clusters <- cutree(hc_complete, k = 3)
+split(names(hc_clusters), hc_clusters)
+#Cluster 1: Alabama, Alaska, Arizona, California, Delaware, Florida, Illinois, Louisiana, Maryland, Michigan, Mississippi, Nevada, New Mexico, New York, North Carolina, South Carolina
+#Cluster 2: Arkansas, Colorado, Georgia, Massachusetts, Missouri, New Jersey, Oklahoma, Oregon, Rhode Island, Tennessee, Texas, Virginia, Washington, Wyoming
+#Cluster 3: Connecticut, Hawaii, Idaho, Indiana, Iowa, Kansas, Kentucky, Maine, Minnesota, Montana, Nebraska, New Hampshire, North Dakota, Ohio, Pennsylvania, South Dakota, Utah, Vermont, West Virginia,  Wisconsin
+
+#Hierarchical clustering by states after scaling the variables to have one standard deviation
+USArrestsScaled <- scale(USArrests)
+hc_complete_scaled <- hclust(dist(USArrestsScaled), method = "complete")
+plot(hc_complete_scaled, main = "Hierarchical Clustering Scaled")
+
+#Effect of scaling variables on hierarchical clustering.
+#Scaling affects clustering as a result of Euclidian distance being sensitive to the magnitude if variables. Prior to scaling because a variable like assault 
+#dominates distance calculations because of its large range many states were likely grouped primarily based on assault levels. Once it is scaled by 1
+#standard deviation each variable contributes to how they are clustered much more evenly. We SHOULD scale before computing dissimilarities.
+#This is because without scaling, the clustering can be skewed by leaing heavily on a variable like in our case assault whereas scaling allows it to be more balanced.
