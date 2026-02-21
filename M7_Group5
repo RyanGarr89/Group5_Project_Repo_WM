@@ -53,4 +53,4 @@ plot(hc_complete_scaled, main = "Hierarchical Clustering Scaled")
 #Scaling affects clustering as a result of Euclidian distance being sensitive to the magnitude if variables. Prior to scaling because a variable like assault 
 #dominates distance calculations because of its large range many states were likely grouped primarily based on assault levels. Once it is scaled by 1
 #standard deviation each variable contributes to how they are clustered much more evenly. We SHOULD scale before computing dissimilarities.
-#This is because without scaling, the clustering can be skewed by leaing heavily on a variable like in our case assault whereas scaling allows it to be more balanced.
+#This is because without scaling, the clustering can be skewed by leaning heavily on a variable like in our case assault whereas scaling allows it to be more balanced.
